@@ -83,14 +83,14 @@ const fzLocal = {
             case tuyaLocal.dataPoints.me167Heating:
                 switch(value) {
                   case 0:
-                    result.heating = "ON"; // valve open
+                    result.running_state = "heat"; // valve open
                     break;
                   case 1:
-                    result.heating = "OFF"; // valve closed
+                    result.running_state = "idle"; // valve closed
                     break;
                   default:
                     meta.logger.warn('zigbee-herdsman-converters:me167_thermostat: ' +
-                      `Heating ${value} is not recognized.`);
+                      `Running state ${value} is not recognized.`);
                     break;
                 }
                 break;
@@ -111,35 +111,35 @@ const fzLocal = {
                     break;
                 }
                 break;
-              case tuyaLocal.dataPoints.me167Schedule1:
-                weeklySchedule(0,value);
-                break;
-              case tuyaLocal.dataPoints.me167Schedule2:
-                weeklySchedule(1,value);
-                break;
-              case tuyaLocal.dataPoints.me167Schedule3:
-                weeklySchedule(2,value);
-                break;
-              case tuyaLocal.dataPoints.me167Schedule4:
-                weeklySchedule(3,value);
-                break;
-              case tuyaLocal.dataPoints.me167Schedule5:
-                weeklySchedule(4,value);
-                break;
-              case tuyaLocal.dataPoints.me167Schedule6:
-                weeklySchedule(5,value);
-                break;
-              case tuyaLocal.dataPoints.me167Schedule7:
-                weeklySchedule(6,value);
-                break;
-              case tuyaLocal.dataPoints.me167TempCalibration:
-                if (value > 4000000000 ){
-                  result.local_temperature_calibration = (value-4294967295)-1 // negative values
-                }else{
-                  result.local_temperature_calibration = value
-                }
-                break;
-              case tuyaLocal.dataPoints.me167ErrorCode:
+            case tuyaLocal.dataPoints.me167Schedule1:
+              weeklySchedule(0,value);
+              break;
+            case tuyaLocal.dataPoints.me167Schedule2:
+              weeklySchedule(1,value);
+              break;
+            case tuyaLocal.dataPoints.me167Schedule3:
+              weeklySchedule(2,value);
+              break;
+            case tuyaLocal.dataPoints.me167Schedule4:
+              weeklySchedule(3,value);
+              break;
+            case tuyaLocal.dataPoints.me167Schedule5:
+              weeklySchedule(4,value);
+              break;
+            case tuyaLocal.dataPoints.me167Schedule6:
+              weeklySchedule(5,value);
+              break;
+            case tuyaLocal.dataPoints.me167Schedule7:
+              weeklySchedule(6,value);
+              break;
+            case tuyaLocal.dataPoints.me167TempCalibration:
+              if (value >= 4294967295 ){
+                result.local_temperature_calibration = (value-4294967295)-1 // negative values
+              }else{
+                result.local_temperature_calibration = value
+              }
+              break;
+            case tuyaLocal.dataPoints.me167ErrorCode:
                 switch (value) {
                   case 0: // OK
                       result.battery_low = false;
@@ -157,12 +157,12 @@ const fzLocal = {
                       break;
                   }
                 break; 
-              case tuyaLocal.dataPoints.me167FrostGuard:
-                result.frost_guard = value ? 'ON' : 'OFF';
-                break;
-              case tuyaLocal.dataPoints.me167AntiScaling:
-                result.anti_scaling = value ? 'ON' : 'OFF';
-                break;
+            case tuyaLocal.dataPoints.me167FrostGuard:
+              result.frost_guard = value ? 'ON' : 'OFF';
+              break;
+            case tuyaLocal.dataPoints.me167AntiScaling:
+              result.anti_scaling = value ? 'ON' : 'OFF';
+              break;
 
             default:
                 meta.logger.warn(`zigbee-herdsman-converters:me167_thermostat: NOT RECOGNIZED ` +
@@ -294,13 +294,13 @@ const definition = {
     },
     exposes: [
       e.child_lock(),
-      exposes.binary('heating', ea.STATE, 'ON', 'OFF').withDescription('Device valve is open or closed (heating or not)'),
       exposes.switch().withState('anti_scaling', true).withDescription('Anti Scaling feature is ON or OFF'),
       exposes.switch().withState('frost_guard', true).withDescription('Frost Protection feature is ON or OFF'),
       exposes.climate().withSetpoint('current_heating_setpoint', 5, 35, 1)
                      .withLocalTemperature()
                      .withSystemMode(['auto','heat','off'])
-                     .withLocalTemperatureCalibration(-3, 3, 1, ea.STATE_SET)
+                     .withRunningState(['idle', 'heat'], ea.STATE)
+                     .withLocalTemperatureCalibration(-10, 10, 1, ea.STATE_SET)
     ],
 };
 
