@@ -152,7 +152,7 @@ const fzLocal = {
                     `${JSON.stringify(dpValue)}`);
                       break;
                   default:
-                      meta.logger.info(`zigbee-herdsman-converters:me167_thermostat: Error Code not recognized: ` +
+                      meta.logger.warn(`zigbee-herdsman-converters:me167_thermostat: Error Code not recognized: ` +
                     `${JSON.stringify(dpValue)}`);
                       break;
                   }
