@@ -10,4 +10,6 @@ Please see https://www.zigbee2mqtt.io/guide/configuration/more-config-options.ht
 ## Installation (Zigbee2mqtt Home Asisstant add-on)
 
 1. In your `config/zigbee2mqtt` folder, add `me167.js`.
-2. Open your zigbee2mqtt addon page and add an external converter, type `me167.js` into the text box which appears.
+2. Open your zigbee2mqtt addon Web UI, navigate to settings, then external converters
+3. Click the '+' button, and type `me167.js` into the text box which appears.
+4. Click submit and restart Zigbee2mqtt
