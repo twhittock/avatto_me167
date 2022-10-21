@@ -246,13 +246,13 @@ const tzLocal = {
   me167_thermostat_anti_scaling: {
     key: ['anti_scaling'],
     convertSet: async (entity, key, value, meta) => {
-      await tuya.sendDataPointValue(entity, tuyaLocal.dataPoints.me167AntiScaling, value);
+      await tuya.sendDataPointBool(entity, tuyaLocal.dataPoints.me167AntiScaling, value === 'ON');
     },
   },
   me167_thermostat_frost_guard: {
     key: ['frost_guard'],
     convertSet: async (entity, key, value, meta) => {
-      await tuya.sendDataPointValue(entity, tuyaLocal.dataPoints.me167FrostGuard, value);
+      await tuya.sendDataPointBool(entity, tuyaLocal.dataPoints.me167FrostGuard, value === 'ON');
     },
   },
 };
