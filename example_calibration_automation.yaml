@@ -1,0 +1,31 @@
+alias: climate - calibrate YOUR_TRV
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.YOUR_THERMOMETER
+    attribute: temperature
+  - platform: state
+    entity_id:
+      - climate.YOUR_TRV
+    attribute: current_temperature
+condition:
+  - condition: template
+    value_template: >-
+      {% set valve = state_attr('climate.YOUR_TRV', 'current_temperature') %}
+      {% set sensor = state_attr('sensor.YOUR_THERMOMETER', 'temperature') | float %}
+      {% set currentcal = states('number.YOUR_TRV_local_temperature_calibration') | float %}
+      {% set idealcal = (currentcal + sensor - valve) | round(0) %}
+      {{idealcal != currentcal}}
+action:
+  - service: number.set_value
+    data:
+      value: >
+        {% set valve = state_attr('climate.YOUR_TRV', 'current_temperature') %}
+        {% set sensor = state_attr('sensor.YOUR_THERMOMETER', 'temperature') | float %}
+        {% set currentcal = states('number.YOUR_TRV_local_temperature_calibration') | float %}
+        {% set idealcal = (currentcal + sensor - valve) | round(0) %}
+        {{idealcal}}
+    target:
+      entity_id: number.YOUR_TRV_local_temperature_calibration
+mode: single
