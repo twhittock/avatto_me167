@@ -3,6 +3,8 @@ Avatto ME167 Zigbee Herdsman external converter
 
 Created by @raketenemo - for the history of the converter please see https://github.com/Koenkk/zigbee2mqtt/issues/13727
 
+This repository should be redundant when Koenkk/zigbee-herdsman-converters#5081 is released
+
 ## Installation (Zigbee2mqtt stand-alone)
 
 Please see https://www.zigbee2mqtt.io/guide/configuration/more-config-options.html#external-converters for how to install the external converter.
